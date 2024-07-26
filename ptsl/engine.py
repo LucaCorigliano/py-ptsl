@@ -975,3 +975,8 @@ class Engine:
         '''
         op = ops.Spot(location_data=spot_location_data)
         self.client.run(op)
+    def undo(self):
+        '''
+        Undo last action
+        '''
+        self.client.run(ops.Undo())

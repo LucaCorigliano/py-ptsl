@@ -222,6 +222,7 @@ class Engine:
 
     def import_audio(self,
                      file_list: List[str],
+                     session_path : str,
                      destination_path: Optional[str] = None,
                      audio_operations: Optional[AudioOperations] = None,
                      audio_destination: Optional[MediaDestination] = None,
@@ -246,7 +247,12 @@ class Engine:
                                   audio_location=audio_location,
                                   location_data=location_data
                                   )
-        op = ops.Import(import_type=1, audio_data=audio_data)
+        op = ops.Import(
+            import_type=1, 
+            session_path=session_path,
+            audio_data=audio_data,
+            session_data=None
+        )
         self.client.run(op)
 
     def select_all_clips_on_track(self, track_name: str):
@@ -853,6 +859,7 @@ class Engine:
                                pre_roll_start_time: Optional[str] = None,
                                post_roll_stop_time: Optional[str] = None,
                                pre_roll_enabled: Optional[TripleBool] = None,
+                               post_roll_enabled: Optional[TripleBool] = None,
                                update_video_to:
                                Optional[TimelineUpdateVideo] = None,
                                propagate_to_satellites:
@@ -887,7 +894,8 @@ class Engine:
                                  track_name=track_name,
                                  track_format=track_format,
                                  track_type=track_type,
-                                 track_timebase=track_timebase
+                                 track_timebase=track_timebase,
+                                 pagination_request=pt.PaginationRequest(limit=1000, offset=0)
                                  )
         self.client.run(op)
 

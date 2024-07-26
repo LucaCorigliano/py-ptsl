@@ -960,3 +960,18 @@ class Engine:
         self.client.run(op)
 
         return op.response.samples
+    def spot(self,
+                timecode: Optional[str] = None,
+                location_type: Optional[SpotLocationType] = Start,
+                location_options: Optional[TrackOffsetOptions] = TimeCode
+        ) -> None:
+        spot_location_data = pt.SpotLocationData(
+            location_type=location_type,
+            location_options=location_options,
+            location_value=timecode
+        )
+        '''
+        Spot current selection to the timeline
+        '''
+        op = ops.Spot(location_data=spot_location_data)
+        self.client.run(op)

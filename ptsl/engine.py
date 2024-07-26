@@ -394,16 +394,47 @@ class Engine:
 
     def get_edit_mode(self):
         """
-        :returns: The current edit mode and options:
+        :returns: The current edit mode:
         """
         op = ops.GetEditMode()
         self.client.run(op)
-        # mode = op.response.current_setting
 
-        op2 = ops.GetEditModeOptions()
-        self.client.run(op2)
-        # options = op.response.edit_mode_options
+        return op.response.current_settings
+    def get_edit_mode_options(self):
+        """
+        :returns: The current edit mode options:
+        """
 
+        op = ops.GetEditModeOptions()
+        self.client.run(op)
+        return op.response.edit_mode_options
+    def set_edit_mode_options(
+            self,
+            tab_to_transients: Optional[bool] = None,
+            link_timeline_and_edit_selection: Optional[bool] = None,
+            link_track_and_edit_selection: Optional[bool] = None,
+            insertion_follows_playback: Optional[bool] = None,
+            automation_follows_edit: Optional[bool] = None,
+            markers_follow_edit: Optional[bool] = None,
+            mirrored_midi_editing: Optional[bool] = None,
+            layered_editing: Optional[bool] = None,
+        ):
+        '''
+        Set edit mode options
+        '''
+        edit_mode_options = pt.EditModeOptions(
+            tab_to_transients=tab_to_transients,
+            link_timeline_and_edit_selection=link_timeline_and_edit_selection,
+            link_track_and_edit_selection=link_track_and_edit_selection,
+            insertion_follows_playback=insertion_follows_playback,
+            automation_follows_edit=automation_follows_edit,
+            markers_follow_edit=markers_follow_edit,
+            mirrored_midi_editing=mirrored_midi_editing,
+            layered_editing=layered_editing,
+        )
+
+        op = ops.SetEditModeOptions(edit_mode_options=edit_mode_options)
+        self.client.run(op)
     def edit_memory_location(self, location_number: int,
                              name: str,
                              start_time: str, end_time: str,
